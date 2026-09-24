@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kairi Mikhaela D. Bautista - Resume</title>
+    <title>Kairi Mikhaela D. Bautista - Web Resume</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -15,8 +15,10 @@
                         brand: {
                             50: '#f0fdf4',
                             100: '#dcfce7',
+                            400: '#4ade80',
                             500: '#22c55e',
                             600: '#16a34a',
+                            700: '#15803d',
                             900: '#14532d',
                         }
                     },
@@ -33,160 +35,165 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    
     <style>
         /* Custom print stylesheet */
         @media print {
             .no-print { display: none !important; }
-            body { background: white !important; color: black !important; font-size: 11pt; }
-            .print-card { border: none !important; shadow: none !important; padding: 0 !important; background: transparent !important; }
+            body { background: white !important; color: #0f172a !important; font-size: 10pt; }
+            .print-card { border: none !important; box-shadow: none !important; padding: 0 !important; background: transparent !important; }
             .print-break-inside-avoid { break-inside: avoid; }
-            a { text-decoration: none !important; color: black !important; }
+            a { text-decoration: none !important; color: inherit !important; }
             .github-container { max-width: 100% !important; padding: 0 !important; }
+            .print-text-dark { color: #0f172a !important; }
+            .print-text-muted { color: #475569 !important; }
+            .print-border { border-color: #e2e8f0 !important; }
         }
         
-        /* Smooth transitions */
-        * { transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease; }
+        /* Smooth transitions for theme toggles */
+        * { transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease; }
     </style>
 </head>
 <body class="bg-slate-900 text-slate-100 font-sans min-h-screen antialiased flex flex-col justify-between selection:bg-brand-500 selection:text-white">
 
-    <!-- Top Toolbar / Controller (Hidden when printed) -->
-    <header class="no-print sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 py-3">
-        <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
+    <header class="no-print sticky top-0 z-50 bg-slate-900/90 dark:bg-slate-900/90 bg-white/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 py-3">
+        <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-3">
             
             <!-- Left Controls: Mode & Search -->
             <div class="flex items-center gap-3">
-                <div class="flex items-center bg-slate-800 rounded-lg p-1 border border-slate-700">
-                    <button id="view-responsive" onclick="setLayout('responsive')" class="px-3 py-1.5 text-xs font-medium rounded-md bg-slate-700 text-white flex items-center gap-1.5 shadow-sm transition">
-                        <i data-lucide="layout" class="w-3.5 h-3.5"></i> Clean Layout
+                <div class="flex items-center bg-slate-100 dark:bg-slate-800 rounded-xl p-1 border border-slate-200 dark:border-slate-700">
+                    <button id="view-responsive" onclick="setLayout('grid')" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-white dark:bg-slate-700 text-slate-800 dark:text-white shadow-sm flex items-center gap-1.5 transition">
+                        <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Grid Layout</span>
                     </button>
-                    <button id="view-github" onclick="setLayout('github')" class="px-3 py-1.5 text-xs font-medium rounded-md text-slate-400 hover:text-white flex items-center gap-1.5 transition">
-                        <i data-lucide="github" class="w-3.5 h-3.5"></i> GitHub Readme Mode
+                    <button id="view-single" onclick="setLayout('single')" class="px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center gap-1.5 transition">
+                        <i data-lucide="columns" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Single Column</span>
                     </button>
                 </div>
 
-                <!-- Live Search -->
+                <!-- Live Keyword Filter -->
                 <div class="relative hidden sm:block">
                     <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                    <input type="text" id="searchInput" onkeyup="filterResume()" placeholder="Filter skills, roles..." class="bg-slate-800 text-xs text-slate-200 pl-9 pr-3 py-1.5 rounded-lg border border-slate-700 focus:outline-none focus:border-brand-500 w-40 md:w-56 transition">
+                    <input type="text" id="searchInput" onkeyup="filterResume()" placeholder="Search skills, roles..." class="bg-slate-100 dark:bg-slate-800 text-xs text-slate-800 dark:text-slate-200 pl-9 pr-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 focus:outline-none focus:border-brand-500 dark:focus:border-brand-500 w-44 md:w-56 transition">
                 </div>
             </div>
 
-            <!-- Right Controls: Viewports, Print, Copy Raw -->
+            <!-- Right Controls: Theme Toggle, Print, Share -->
             <div class="flex items-center gap-2">
-                <!-- Device Viewport Preview Switcher -->
-                <div class="hidden md:flex items-center bg-slate-800 rounded-lg p-1 border border-slate-700">
-                    <button onclick="setViewport('full')" title="Full Width" class="p-1.5 text-slate-400 hover:text-white rounded hover:bg-slate-700"><i data-lucide="monitor" class="w-4 h-4"></i></button>
-                    <button onclick="setViewport('tablet')" title="Tablet View" class="p-1.5 text-slate-400 hover:text-white rounded hover:bg-slate-700"><i data-lucide="tablet" class="w-4 h-4"></i></button>
-                    <button onclick="setViewport('mobile')" title="Mobile View" class="p-1.5 text-slate-400 hover:text-white rounded hover:bg-slate-700"><i data-lucide="smartphone" class="w-4 h-4"></i></button>
-                </div>
-
-                <!-- Theme Toggle -->
-                <button onclick="toggleTheme()" class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg border border-slate-700 transition" title="Toggle Light/Dark Theme">
+                <!-- Theme Toggle Button -->
+                <button onclick="toggleTheme()" class="p-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl border border-slate-200 dark:border-slate-700 transition" title="Toggle Light / Dark Mode">
                     <i data-lucide="sun" id="theme-icon-sun" class="w-4 h-4 hidden"></i>
                     <i data-lucide="moon" id="theme-icon-moon" class="w-4 h-4"></i>
                 </button>
 
-                <!-- Copy Markdown -->
-                <button onclick="copyMarkdown()" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-medium rounded-lg border border-slate-700 transition">
-                    <i data-lucide="copy" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Copy Markdown</span>
+                <!-- Copy Email Quick Action -->
+                <button onclick="copyText('kairimdb@gmail.com', 'Email copied to clipboard!')" class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 transition" title="Copy Email">
+                    <i data-lucide="copy" class="w-3.5 h-3.5"></i> <span class="hidden md:inline">Copy Email</span>
                 </button>
 
                 <!-- Print / Export PDF -->
-                <button onclick="window.print()" class="flex items-center gap-1.5 px-3 py-1.5 bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold rounded-lg shadow-lg shadow-brand-600/20 transition">
-                    <i data-lucide="printer" class="w-3.5 h-3.5"></i> <span class="hidden sm:inline">Print / PDF</span>
+                <button onclick="window.print()" class="flex items-center gap-1.5 px-3 py-1.5 bg-brand-600 hover:bg-brand-500 text-white text-xs font-bold rounded-xl shadow-lg shadow-brand-600/20 transition">
+                    <i data-lucide="printer" class="w-3.5 h-3.5"></i> <span>Print / PDF</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- Main Container -->
     <main id="viewport-container" class="max-w-5xl mx-auto px-4 py-8 w-full flex-grow transition-all duration-300">
         
         <!-- Interactive Resume Card -->
-        <div id="resume-card" class="bg-slate-800/80 backdrop-blur-sm border border-slate-700/80 rounded-2xl shadow-2xl p-6 sm:p-10 print-card">
+        <div id="resume-card" class="bg-slate-800/80 dark:bg-slate-800/80 bg-white border border-slate-200 dark:border-slate-700/80 rounded-3xl shadow-2xl p-6 sm:p-10 print-card">
             
-            <!-- Header Section -->
-            <header class="border-b border-slate-700/80 pb-8 mb-8">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                    <div>
-                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 text-brand-400 text-xs font-mono font-medium border border-brand-500/20 mb-3">
+            <!-- Header Section with Profile Photo -->
+            <header class="border-b border-slate-200 dark:border-slate-700/80 pb-8 mb-8 print-border">
+                <div class="flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-6">
+                    
+                    <!-- Title & Information -->
+                    <div class="flex-grow space-y-2">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 text-brand-600 dark:text-brand-400 text-xs font-mono font-semibold border border-brand-500/20">
                             <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span> Open for Opportunities
                         </div>
-                        <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-white mb-2" id="user-name">Kairi Mikhaela D. Bautista</h1>
-                        <p class="text-lg text-slate-400 font-medium">Information Technology Student & Developer</p>
-                    </div>
+                        <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white print-text-dark" id="user-name">
+                            Kairi Mikhaela D. Bautista
+                        </h1>
+                        <p class="text-base sm:text-lg text-brand-600 dark:text-brand-400 font-semibold print-text-muted">
+                            IT Student (Game Development) | Frontend Developer | Multimedia Specialist
+                        </p>
 
-                    <!-- Quick Contacts -->
-                    <div class="flex flex-col gap-2 text-sm text-slate-300">
-                        <a href="mailto:kairimdb@gmail.com" class="flex items-center gap-2.5 hover:text-brand-400 transition group">
-                            <div class="p-2 rounded-lg bg-slate-700/50 text-brand-400 group-hover:bg-brand-500 group-hover:text-white transition">
-                                <i data-lucide="mail" class="w-4 h-4"></i>
+                        <!-- Interactive Contact Links -->
+                        <div class="pt-2 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs sm:text-sm text-slate-600 dark:text-slate-300 print-text-muted">
+                            <button onclick="copyText('kairimdb@gmail.com', 'Email address copied!')" class="flex items-center gap-2 hover:text-brand-500 transition group text-left">
+                                <i data-lucide="mail" class="w-4 h-4 text-brand-500 group-hover:scale-110 transition-transform"></i>
+                                <span>kairimdb@gmail.com</span>
+                            </button>
+                            <button onclick="copyText('+639453424164', 'Phone number copied!')" class="flex items-center gap-2 hover:text-brand-500 transition group text-left">
+                                <i data-lucide="phone" class="w-4 h-4 text-brand-500 group-hover:scale-110 transition-transform"></i>
+                                <span>+63 945 342 4164</span>
+                            </button>
+                            <div class="flex items-center gap-2 text-slate-500 dark:text-slate-400">
+                                <i data-lucide="map-pin" class="w-4 h-4 text-brand-500"></i>
+                                <span>Las Piñas City, Philippines</span>
                             </div>
-                            <span>kairimdb@gmail.com</span>
-                        </a>
-                        <a href="tel:+639453424164" class="flex items-center gap-2.5 hover:text-brand-400 transition group">
-                            <div class="p-2 rounded-lg bg-slate-700/50 text-brand-400 group-hover:bg-brand-500 group-hover:text-white transition">
-                                <i data-lucide="phone" class="w-4 h-4"></i>
-                            </div>
-                            <span>+63 945 342 4164</span>
-                        </a>
-                        <div class="flex items-center gap-2.5 text-slate-400">
-                            <div class="p-2 rounded-lg bg-slate-700/50 text-slate-400">
-                                <i data-lucide="map-pin" class="w-4 h-4"></i>
-                            </div>
-                            <span>Las Piñas City, Philippines</span>
                         </div>
                     </div>
+
+                    <!-- Profile Photo Frame -->
+                    <div class="flex-shrink-0 self-start sm:self-center">
+                        <div class="relative group">
+                            <div class="absolute -inset-0.5 bg-gradient-to-r from-brand-500 to-emerald-600 rounded-2xl blur opacity-30 group-hover:opacity-75 transition duration-300"></div>
+                            <img src="1x1.jpeg" 
+                                 onerror="this.onerror=null; this.src='1x1.jpg'; this.parentElement.onerror=null;" 
+                                 alt="Kairi Mikhaela D. Bautista" 
+                                 class="relative w-28 h-28 sm:w-32 sm:h-32 rounded-2xl object-cover object-top border-2 border-slate-200 dark:border-slate-700 shadow-xl">
+                        </div>
+                    </div>
+
                 </div>
             </header>
 
-            <!-- Dynamic Layout Grid Wrapper -->
             <div id="layout-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 
-                <!-- Main Column (Left/Top on responsive) -->
+                <!-- Main Column (Left/Top) -->
                 <div class="md:col-span-2 space-y-8">
                     
-                    <!-- Career Objective / Bio -->
+                    <!-- Career Objective -->
                     <section class="filterable-item">
-                        <div class="flex items-center gap-2 text-brand-400 font-semibold mb-3 text-sm uppercase tracking-wider">
-                            <i data-lucide="user" class="w-4 h-4"></i> About & Career Objective
+                        <div class="flex items-center gap-2 text-brand-600 dark:text-brand-400 font-bold mb-3 text-xs uppercase tracking-wider">
+                            <i data-lucide="target" class="w-4 h-4"></i> Career Objective
                         </div>
-                        <p class="text-slate-300 leading-relaxed text-sm sm:text-base">
-                            A highly versatile and detail-oriented <strong class="text-white">Information Technology student majoring in Game Development</strong>, combining technical frontend skills with 5 years of professional experience in sales, creative multimedia design, and customer relations. Seeking an opportunity to leverage a diverse skillset in web development, design, and content creation to contribute to innovative digital solutions and company growth.
+                        <p class="text-slate-700 dark:text-slate-300 leading-relaxed text-sm sm:text-base print-text-dark">
+                            A highly versatile and detail-oriented <strong class="text-slate-900 dark:text-white font-semibold">Information Technology student specializing in Game Development</strong>, combining technical frontend skills with 5 years of professional experience in sales, creative multimedia design, and customer relations. Seeking an opportunity to leverage a diverse skillset in web development, design, and content creation to contribute to innovative digital solutions and company growth.
                         </p>
                     </section>
 
-                    <!-- Work Experience -->
                     <section class="printable-section">
-                        <div class="flex items-center gap-2 text-brand-400 font-semibold mb-4 text-sm uppercase tracking-wider">
+                        <div class="flex items-center gap-2 text-brand-600 dark:text-brand-400 font-bold mb-5 text-xs uppercase tracking-wider">
                             <i data-lucide="briefcase" class="w-4 h-4"></i> Internship & Work Experience
                         </div>
 
                         <div class="space-y-6">
                             <!-- Role 1 -->
-                            <div class="filterable-item relative pl-6 border-l-2 border-slate-700 hover:border-brand-500 transition print-break-inside-avoid">
-                                <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-slate-900 border-2 border-brand-500"></div>
+                            <div class="filterable-item relative pl-6 border-l-2 border-brand-500/30 dark:border-brand-500/40 hover:border-brand-500 transition print-break-inside-avoid">
+                                <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-white dark:bg-slate-900 border-2 border-brand-500"></div>
                                 <div class="flex flex-wrap justify-between items-start gap-1 mb-1">
-                                    <h3 class="font-bold text-white text-base">Frontend Development Intern</h3>
-                                    <span class="text-xs font-mono px-2 py-0.5 rounded bg-slate-700 text-brand-300">June 2025 – Jan 2026</span>
+                                    <h3 class="font-bold text-slate-900 dark:text-white text-base print-text-dark">Frontend Development Intern</h3>
+                                    <span class="text-xs font-mono px-2.5 py-1 rounded-md bg-brand-50 dark:bg-slate-700/60 text-brand-700 dark:text-brand-300 font-medium">June 2025 – Jan 2026</span>
                                 </div>
-                                <p class="text-xs text-brand-400 font-medium mb-2">Thinkable · <span class="text-slate-400">Estonia, Europe (Remote)</span></p>
-                                <ul class="list-disc list-inside text-sm text-slate-300 space-y-1">
-                                    <li>Collaborated on frontend development tasks, implementing responsive user interface designs using HTML, JavaScript, and Python.</li>
+                                <p class="text-xs font-semibold text-brand-600 dark:text-brand-400 mb-2">Thinkable · <span class="text-slate-500 dark:text-slate-400 font-normal">Estonia, Europe (Remote)</span></p>
+                                <ul class="list-disc list-inside text-sm text-slate-700 dark:text-slate-300 space-y-1.5 print-text-dark">
+                                    <li>Collaborated on frontend development tasks, implementing user interface designs using HTML, JavaScript, and Python.</li>
                                     <li>Contributed to basic web development and responsive layout designs for digital platforms.</li>
                                 </ul>
                             </div>
 
                             <!-- Role 2 -->
-                            <div class="filterable-item relative pl-6 border-l-2 border-slate-700 hover:border-brand-500 transition print-break-inside-avoid">
-                                <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-slate-900 border-2 border-slate-600"></div>
+                            <div class="filterable-item relative pl-6 border-l-2 border-slate-200 dark:border-slate-700 hover:border-brand-500 transition print-break-inside-avoid">
+                                <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-400 dark:border-slate-600"></div>
                                 <div class="flex flex-wrap justify-between items-start gap-1 mb-1">
-                                    <h3 class="font-bold text-white text-base">Sales & Client Accounts Manager</h3>
-                                    <span class="text-xs font-mono px-2 py-0.5 rounded bg-slate-700 text-slate-300">2021 – 2026</span>
+                                    <h3 class="font-bold text-slate-900 dark:text-white text-base print-text-dark">Sales and Client Accounts Manager</h3>
+                                    <span class="text-xs font-mono px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-700/60 text-slate-700 dark:text-slate-300 font-medium">2021 – 2026</span>
                                 </div>
-                                <p class="text-xs text-brand-400 font-medium mb-2">Bridesdream · <span class="text-slate-400">Las Piñas City, Philippines</span></p>
-                                <ul class="list-disc list-inside text-sm text-slate-300 space-y-1">
+                                <p class="text-xs font-semibold text-brand-600 dark:text-brand-400 mb-2">Bridesdream · <span class="text-slate-500 dark:text-slate-400 font-normal">Las Piñas City, Philippines</span></p>
+                                <ul class="list-disc list-inside text-sm text-slate-700 dark:text-slate-300 space-y-1.5 print-text-dark">
                                     <li>Managed full-lifecycle client accounts and customer service from initial consultation to final wedding event execution over a 5-year period.</li>
                                     <li>Assisted in custom gown design consultations and coordinated critical event logistics to ensure high client satisfaction.</li>
                                 </ul>
@@ -194,45 +201,46 @@
                         </div>
                     </section>
 
-                    <!-- Education -->
                     <section class="printable-section">
-                        <div class="flex items-center gap-2 text-brand-400 font-semibold mb-4 text-sm uppercase tracking-wider">
+                        <div class="flex items-center gap-2 text-brand-600 dark:text-brand-400 font-bold mb-4 text-xs uppercase tracking-wider">
                             <i data-lucide="graduation-cap" class="w-4 h-4"></i> Education
                         </div>
 
-                        <div class="space-y-4">
-                            <div class="filterable-item p-4 rounded-xl bg-slate-900/50 border border-slate-700/50 hover:border-slate-600 transition">
-                                <div class="flex justify-between items-start mb-1">
-                                    <h3 class="font-bold text-white text-sm">Bachelor of Science in Information Technology</h3>
-                                    <span class="text-xs font-mono text-brand-400">2023 – Present</span>
+                        <div class="space-y-3">
+                            <div class="filterable-item p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/50 hover:border-brand-500/50 transition">
+                                <div class="flex justify-between items-start mb-1 flex-wrap gap-1">
+                                    <h3 class="font-bold text-slate-900 dark:text-white text-sm print-text-dark">Bachelor of Science in Information Technology</h3>
+                                    <span class="text-xs font-mono text-brand-600 dark:text-brand-400 font-semibold">2023 – Present</span>
                                 </div>
-                                <p class="text-xs text-slate-300 font-medium">Major in Game Development</p>
-                                <p class="text-xs text-slate-400 mt-1">University of Perpetual Help System DALTA <span class="italic text-slate-500">(Currently taking gap year)</span></p>
+                                <p class="text-xs text-slate-700 dark:text-slate-300 font-semibold">Major in Game Development</p>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">University of Perpetual Help System DALTA <span class="italic text-slate-400 dark:text-slate-500">(Currently taking a gap year)</span></p>
                             </div>
 
-                            <div class="filterable-item p-4 rounded-xl bg-slate-900/50 border border-slate-700/50 hover:border-slate-600 transition">
-                                <div class="flex justify-between items-start mb-1">
-                                    <h3 class="font-bold text-white text-sm">Senior High School – STEM Strand</h3>
-                                    <span class="text-xs font-mono text-slate-400">2021 – 2023</span>
+                            <div class="filterable-item p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700/50 hover:border-brand-500/50 transition">
+                                <div class="flex justify-between items-start mb-1 flex-wrap gap-1">
+                                    <h3 class="font-bold text-slate-900 dark:text-white text-sm print-text-dark">Senior High School – STEM Strand</h3>
+                                    <span class="text-xs font-mono text-slate-500 dark:text-slate-400">2021 – 2023</span>
                                 </div>
-                                <p class="text-xs text-slate-400">University of Perpetual Help System DALTA</p>
-                                <span class="inline-block mt-2 px-2 py-0.5 text-xs rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">Bronze Medalist & Honor Student</span>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">University of Perpetual Help System DALTA</p>
+                                <span class="inline-flex items-center gap-1 mt-2 px-2.5 py-0.5 text-xs rounded-full bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20 font-medium">
+                                    <i data-lucide="award" class="w-3 h-3"></i> Bronze Medalist & Honor Student
+                                </span>
                             </div>
 
                             <!-- Expandable Older Education -->
-                            <details class="group no-print">
-                                <summary class="cursor-pointer text-xs text-slate-400 hover:text-brand-400 flex items-center gap-1 py-1 font-mono select-none">
-                                    <span>Show earlier education history</span>
-                                    <i data-lucide="chevron-down" class="w-3 h-3 group-open:rotate-180 transition-transform"></i>
+                            <details class="group no-print pt-1">
+                                <summary class="cursor-pointer text-xs text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 flex items-center gap-1 font-mono select-none">
+                                    <span>View earlier education history</span>
+                                    <i data-lucide="chevron-down" class="w-3.5 h-3.5 group-open:rotate-180 transition-transform"></i>
                                 </summary>
-                                <div class="mt-3 space-y-3 pl-2 border-l-2 border-slate-800">
-                                    <div class="text-xs">
-                                        <p class="text-slate-300 font-medium">Junior Business High School</p>
-                                        <p class="text-slate-500">University of Perpetual Help System DALTA (2017 – 2021)</p>
+                                <div class="mt-3 space-y-3 pl-3 border-l-2 border-slate-200 dark:border-slate-800">
+                                    <div class="filterable-item text-xs">
+                                        <p class="text-slate-800 dark:text-slate-200 font-semibold">Junior Business High School</p>
+                                        <p class="text-slate-500 dark:text-slate-400">University of Perpetual Help System DALTA (2017 – 2021)</p>
                                     </div>
-                                    <div class="text-xs">
-                                        <p class="text-slate-300 font-medium">Grade School</p>
-                                        <p class="text-slate-500">Sacred Heart School Multinational Parañaque (2011 – 2017)</p>
+                                    <div class="filterable-item text-xs">
+                                        <p class="text-slate-800 dark:text-slate-200 font-semibold">Grade School</p>
+                                        <p class="text-slate-500 dark:text-slate-400">Sacred Heart School Multinational Parañaque (2011 – 2017)</p>
                                     </div>
                                 </div>
                             </details>
@@ -241,86 +249,84 @@
 
                 </div>
 
-                <!-- Sidebar Column (Right/Bottom on responsive) -->
                 <div class="space-y-8">
                     
-                    <!-- Technical & Interactive Skills -->
+                    <!-- Categorized Skills Pills -->
                     <section class="printable-section">
-                        <div class="flex items-center gap-2 text-brand-400 font-semibold mb-4 text-sm uppercase tracking-wider">
-                            <i data-lucide="code" class="w-4 h-4"></i> Skills & Tech Stack
+                        <div class="flex items-center gap-2 text-brand-600 dark:text-brand-400 font-bold mb-4 text-xs uppercase tracking-wider">
+                            <i data-lucide="code" class="w-4 h-4"></i> Technical & Creative Skills
                         </div>
 
-                        <div class="space-y-4">
-                            <!-- Category 1 -->
+                        <div class="space-y-5">
+                            <!-- Technical -->
                             <div class="filterable-item">
-                                <h4 class="text-xs font-mono text-slate-400 uppercase mb-2">Web & Technical</h4>
+                                <h4 class="text-xs font-mono text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Technical & Web</h4>
                                 <div class="flex flex-wrap gap-1.5">
-                                    <span class="px-2.5 py-1 text-xs rounded-md bg-slate-900 border border-slate-700 text-slate-200 font-mono">HTML5</span>
-                                    <span class="px-2.5 py-1 text-xs rounded-md bg-slate-900 border border-slate-700 text-slate-200 font-mono">JavaScript</span>
-                                    <span class="px-2.5 py-1 text-xs rounded-md bg-slate-900 border border-slate-700 text-slate-200 font-mono">Python</span>
-                                    <span class="px-2.5 py-1 text-xs rounded-md bg-slate-900 border border-slate-700 text-slate-200 font-mono">Responsive Layouts</span>
-                                    <span class="px-2.5 py-1 text-xs rounded-md bg-slate-900 border border-slate-700 text-slate-200 font-mono">Web Design</span>
+                                    <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-mono">HTML</span>
+                                    <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-mono">JavaScript</span>
+                                    <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 font-mono">Python</span>
+                                    <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">Basic Web Design</span>
                                 </div>
                             </div>
 
-                            <!-- Category 2 -->
+                            <!-- Graphic Design -->
                             <div class="filterable-item">
-                                <h4 class="text-xs font-mono text-slate-400 uppercase mb-2">Graphic & Creative Media</h4>
+                                <h4 class="text-xs font-mono text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Graphic & Multimedia</h4>
                                 <div class="flex flex-wrap gap-1.5">
-                                    <span class="px-2.5 py-1 text-xs rounded-md bg-slate-900 border border-slate-700 text-slate-200">Graphic Layout</span>
-                                    <span class="px-2.5 py-1 text-xs rounded-md bg-slate-900 border border-slate-700 text-slate-200">Photoshop</span>
-                                    <span class="px-2.5 py-1 text-xs rounded-md bg-slate-900 border border-slate-700 text-slate-200">Canva</span>
-                                    <span class="px-2.5 py-1 text-xs rounded-md bg-slate-900 border border-slate-700 text-slate-200">Photography</span>
-                                    <span class="px-2.5 py-1 text-xs rounded-md bg-slate-900 border border-slate-700 text-slate-200">Video Editing</span>
+                                    <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">Graphic/Layout Design</span>
+                                    <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">Photoshop</span>
+                                    <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">Canva</span>
+                                    <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">Photography</span>
+                                    <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">Video Editing</span>
                                 </div>
                             </div>
 
-                            <!-- Category 3 -->
+                            <!-- Marketing & Content -->
                             <div class="filterable-item">
-                                <h4 class="text-xs font-mono text-slate-400 uppercase mb-2">Content & Marketing</h4>
+                                <h4 class="text-xs font-mono text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Marketing & Content</h4>
                                 <div class="flex flex-wrap gap-1.5">
-                                    <span class="px-2.5 py-1 text-xs rounded-md bg-slate-900 border border-slate-700 text-slate-200">Social Media</span>
-                                    <span class="px-2.5 py-1 text-xs rounded-md bg-slate-900 border border-slate-700 text-slate-200">Poster Design</span>
-                                    <span class="px-2.5 py-1 text-xs rounded-md bg-slate-900 border border-slate-700 text-slate-200">Video Production</span>
-                                    <span class="px-2.5 py-1 text-xs rounded-md bg-slate-900 border border-slate-700 text-slate-200">Copywriting</span>
+                                    <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">Social Media Publication</span>
+                                    <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">Poster Design</span>
+                                    <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">Video Production</span>
+                                    <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">Caption Writing</span>
                                 </div>
                             </div>
 
-                            <!-- Category 4 -->
+                            <!-- Office & Soft Skills -->
                             <div class="filterable-item">
-                                <h4 class="text-xs font-mono text-slate-400 uppercase mb-2">Productivity & Soft Skills</h4>
+                                <h4 class="text-xs font-mono text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Productivity & Interpersonal</h4>
                                 <div class="flex flex-wrap gap-1.5">
-                                    <span class="px-2.5 py-1 text-xs rounded-md bg-slate-900 border border-slate-700 text-slate-200">MS Office / G-Suite</span>
-                                    <span class="px-2.5 py-1 text-xs rounded-md bg-slate-900 border border-slate-700 text-brand-400 font-medium">80 WPM Typing</span>
-                                    <span class="px-2.5 py-1 text-xs rounded-md bg-slate-900 border border-slate-700 text-slate-200">Client Relations</span>
-                                    <span class="px-2.5 py-1 text-xs rounded-md bg-slate-900 border border-slate-700 text-slate-200">Fluent English</span>
+                                    <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">MS Office / Google Suite</span>
+                                    <span class="px-2.5 py-1 text-xs rounded-lg bg-brand-500/10 border border-brand-500/30 text-brand-600 dark:text-brand-400 font-semibold">80 WPM Typing Speed</span>
+                                    <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">Client Relations</span>
+                                    <span class="px-2.5 py-1 text-xs rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">Fluent English</span>
                                 </div>
                             </div>
                         </div>
                     </section>
 
-                    <!-- Achievements & Roles -->
+                    <!-- Achievements & Activities -->
                     <section class="filterable-item printable-section">
-                        <div class="flex items-center gap-2 text-brand-400 font-semibold mb-4 text-sm uppercase tracking-wider">
-                            <i data-lucide="award" class="w-4 h-4"></i> Achievements & Roles
+                        <div class="flex items-center gap-2 text-brand-600 dark:text-brand-400 font-bold mb-4 text-xs uppercase tracking-wider">
+                            <i data-lucide="trophy" class="w-4 h-4"></i> Achievements & Roles
                         </div>
 
-                        <ul class="space-y-3 text-xs text-slate-300">
-                            <li class="flex items-start gap-2">
-                                <i data-lucide="newspaper" class="w-4 h-4 text-brand-400 flex-shrink-0 mt-0.5"></i>
-                                <span><strong class="text-white">Editor-in-Chief</strong> – University Publication</span>
+                        <ul class="space-y-3 text-xs text-slate-700 dark:text-slate-300">
+                            <li class="flex items-start gap-2.5">
+                                <i data-lucide="newspaper" class="w-4 h-4 text-brand-500 flex-shrink-0 mt-0.5"></i>
+                                <span><strong class="text-slate-900 dark:text-white">Editor-in-Chief</strong> — University Publication</span>
                             </li>
-                            <li class="flex items-start gap-2">
-                                <i data-lucide="camera" class="w-4 h-4 text-brand-400 flex-shrink-0 mt-0.5"></i>
-                                <span><strong class="text-white">Creative Media Documentation Lead</strong> – Digital layout & multimedia coverage</span>
+                            <li class="flex items-start gap-2.5">
+                                <i data-lucide="camera" class="w-4 h-4 text-brand-500 flex-shrink-0 mt-0.5"></i>
+                                <span><strong class="text-slate-900 dark:text-white">Creative Media Documentation Lead</strong> — Spearheaded digital layout & event coverage for multimedia projects</span>
                             </li>
-                            <li class="flex items-start gap-2">
-                                <i data-lucide="pen-tool" class="w-4 h-4 text-brand-400 flex-shrink-0 mt-0.5"></i>
-                                <span><strong class="text-white">Active Creative Writer</strong> – Short fiction, blogging, poetry, narrative story writing</span>
+                            <li class="flex items-start gap-2.5">
+                                <i data-lucide="pen-tool" class="w-4 h-4 text-brand-500 flex-shrink-0 mt-0.5"></i>
+                                <span><strong class="text-slate-900 dark:text-white">Active Creative Writer</strong> — Experienced in short-form fiction, blogging, poetry, and narrative short stories</span>
                             </li>
-                            <li class="flex items-start gap-2">
-                                <i data-lucide="medal" class="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5"></i>
-                                <span><strong class="text-white">Bronze Medalist</strong> – STEM Strand (2023)</span>
+                            <li class="flex items-start gap-2.5">
+                                <i data-lucide="award" class="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5"></i>
+                                <span><strong class="text-slate-900 dark:text-white">Bronze Medalist & Honor Student</strong> — Senior High School STEM Strand (2023)</span>
                             </li>
                         </ul>
                     </section>
@@ -330,84 +336,77 @@
             </div>
 
             <!-- Footer / References -->
-            <footer class="mt-10 pt-6 border-t border-slate-700/80 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-400 gap-4">
+            <footer class="mt-12 pt-6 border-t border-slate-200 dark:border-slate-700/80 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500 dark:text-slate-400 gap-3 print-border">
                 <p>References available upon request.</p>
-                <p class="font-mono text-slate-500 no-print">Designed with HTML, Tailwind CSS & JS</p>
+                <p class="font-mono text-slate-400 dark:text-slate-500 no-print">Designed with HTML, Tailwind CSS & JavaScript</p>
             </footer>
 
         </div>
     </main>
 
-    <!-- Notification Toast -->
-    <div id="toast" class="no-print fixed bottom-5 right-5 bg-brand-600 text-white text-xs font-semibold px-4 py-2.5 rounded-lg shadow-xl translate-y-16 opacity-0 transition-all duration-300 flex items-center gap-2 pointer-events-none">
-        <i data-lucide="check-circle" class="w-4 h-4"></i>
+    <!-- Floating Toast Notification -->
+    <div id="toast" class="no-print fixed bottom-6 right-6 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 text-xs font-bold px-4 py-3 rounded-2xl shadow-2xl translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-2 pointer-events-none z-50 border border-slate-700 dark:border-slate-200">
+        <i data-lucide="check-circle-2" class="w-4 h-4 text-brand-500"></i>
         <span id="toast-message">Copied to clipboard!</span>
     </div>
 
-    <!-- Scripts -->
+    <!-- Interactive JavaScript Engine -->
     <script>
-        // Initialize Lucide Icons
+        // Initialize Icons
         lucide.createIcons();
 
-        // Theme Toggle Functionality
+        // Theme Switcher Functionality
         function toggleTheme() {
-            const isDark = document.documentElement.classList.toggle('dark');
-            const body = document.body;
-            const card = document.getElementById('resume-card');
+            const html = document.documentElement;
             const sunIcon = document.getElementById('theme-icon-sun');
             const moonIcon = document.getElementById('theme-icon-moon');
+            const isDark = html.classList.contains('dark');
 
-            if (body.classList.contains('bg-slate-900')) {
-                // Switch to Light
-                body.classList.replace('bg-slate-900', 'bg-slate-100');
-                body.classList.replace('text-slate-100', 'text-slate-800');
-                card.classList.replace('bg-slate-800/80', 'bg-white');
-                card.classList.replace('border-slate-700/80', 'border-slate-200');
+            if (isDark) {
+                html.classList.remove('dark');
+                document.body.classList.replace('bg-slate-900', 'bg-slate-100');
+                document.body.classList.replace('text-slate-100', 'text-slate-800');
                 sunIcon.classList.remove('hidden');
                 moonIcon.classList.add('hidden');
             } else {
-                // Switch to Dark
-                body.classList.replace('bg-slate-100', 'bg-slate-900');
-                body.classList.replace('text-slate-800', 'text-slate-100');
-                card.classList.replace('bg-white', 'bg-slate-800/80');
-                card.classList.replace('border-slate-200', 'border-slate-700/80');
+                html.classList.add('dark');
+                document.body.classList.replace('bg-slate-100', 'bg-slate-900');
+                document.body.classList.replace('text-slate-800', 'text-slate-100');
                 sunIcon.classList.add('hidden');
                 moonIcon.classList.remove('hidden');
             }
         }
 
-        // Layout Toggle Functionality
+        // Layout Grid Switcher
         function setLayout(type) {
             const grid = document.getElementById('layout-grid');
-            const btnResp = document.getElementById('view-responsive');
-            const btnGit = document.getElementById('view-github');
+            const btnGrid = document.getElementById('view-responsive');
+            const btnSingle = document.getElementById('view-single');
 
-            if (type === 'github') {
+            if (type === 'single') {
                 grid.classList.remove('md:grid-cols-3');
                 grid.classList.add('grid-cols-1');
-                btnGit.classList.add('bg-slate-700', 'text-white');
-                btnGit.classList.remove('text-slate-400');
-                btnResp.classList.remove('bg-slate-700', 'text-white');
-                btnResp.classList.add('text-slate-400');
-                showToast("Switched to Single-Column README Mode");
+                
+                btnSingle.classList.add('bg-white', 'dark:bg-slate-700', 'text-slate-800', 'dark:text-white', 'shadow-sm');
+                btnSingle.classList.remove('text-slate-500', 'dark:text-slate-400');
+                
+                btnGrid.classList.remove('bg-white', 'dark:bg-slate-700', 'text-slate-800', 'dark:text-white', 'shadow-sm');
+                btnGrid.classList.add('text-slate-500', 'dark:text-slate-400');
+                showToast("Switched to Single Column View");
             } else {
                 grid.classList.add('md:grid-cols-3');
                 grid.classList.remove('grid-cols-1');
-                btnResp.classList.add('bg-slate-700', 'text-white');
-                btnResp.classList.remove('text-slate-400');
-                btnGit.classList.remove('bg-slate-700', 'text-white');
-                btnGit.classList.add('text-slate-400');
-                showToast("Switched to Modern Grid Layout");
+
+                btnGrid.classList.add('bg-white', 'dark:bg-slate-700', 'text-slate-800', 'dark:text-white', 'shadow-sm');
+                btnGrid.classList.remove('text-slate-500', 'dark:text-slate-400');
+                
+                btnSingle.classList.remove('bg-white', 'dark:bg-slate-700', 'text-slate-800', 'dark:text-white', 'shadow-sm');
+                btnSingle.classList.add('text-slate-500', 'dark:text-slate-400');
+                showToast("Switched to Responsive Grid View");
             }
         }
 
-        // Viewport Switcher (Simulate Mobile/Tablet Views)
-        function setViewport(size) {
-            const container = document.getElementById('viewport-container');
-            container.style.maxWidth = size === 'mobile' ? '420px' : size === 'tablet' ? '768px' : '1024px';
-        }
-
-        // Live Resume Search Filter
+        // Live Filter/Search Function
         function filterResume() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             const items = document.querySelectorAll('.filterable-item');
@@ -424,44 +423,33 @@
             });
         }
 
-        // Copy Raw Markdown
-        function copyMarkdown() {
-            const rawMarkdown = `# Kairi Mikhaela D. Bautista
-✉ kairimdb@gmail.com | 📞 +639453424164 | 📍 Las Piñas City, Philippines
-
-## CAREER OBJECTIVE
-A highly versatile and detail-oriented Information Technology student majoring in Game Development, combining technical frontend skills with 5 years of professional experience in sales, creative multimedia design, and customer relations.
-
-## EXPERIENCE
-### Frontend Development Intern
-**Thinkable** — Estonia, Europe (June 2025 - January 2026)
-- Implemented user interface designs using HTML, JavaScript, and Python.
-- Contributed to web development and responsive layout designs.
-
-### Sales and Client Accounts Manager
-**Bridesdream** — Las Piñas City, Philippines (2021 - 2026)
-- Managed full-lifecycle client accounts over a 5-year period.
-- Coordinated event logistics and custom consultations.
-
-## EDUCATION
-- **BS Information Technology (Game Dev)** — University of Perpetual Help System DALTA (2023 - Present)
-- **STEM Senior High School** — University of Perpetual Help System DALTA (2021 - 2023)`;
-
-            navigator.clipboard.writeText(rawMarkdown).then(() => {
-                showToast("Markdown copied to clipboard!");
-            });
+        // Copy Text with Clipboard API
+        function copyText(text, message) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast(message);
+                });
+            } else {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast(message);
+            }
         }
 
-        // Toast Helper
+        // Toast Helper Function
         function showToast(msg) {
             const toast = document.getElementById('toast');
             const toastMsg = document.getElementById('toast-message');
             toastMsg.textContent = msg;
-            toast.classList.remove('translate-y-16', 'opacity-0');
+            toast.classList.remove('translate-y-20', 'opacity-0');
             toast.classList.add('translate-y-0', 'opacity-100');
 
             setTimeout(() => {
-                toast.classList.add('translate-y-16', 'opacity-0');
+                toast.classList.add('translate-y-20', 'opacity-0');
                 toast.classList.remove('translate-y-0', 'opacity-100');
             }, 2500);
         }
